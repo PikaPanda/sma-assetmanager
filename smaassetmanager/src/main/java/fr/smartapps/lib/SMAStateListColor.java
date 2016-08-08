@@ -1,13 +1,14 @@
 package fr.smartapps.lib;
 
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 
 /**
  *
  */
-public class SMAStateListColor extends ColorStateList {
+public class SMAStateListColor {
 
     /*
     Attributes
@@ -20,7 +21,6 @@ public class SMAStateListColor extends ColorStateList {
     Constructor
      */
     public SMAStateListColor() {
-        super(null, null);
         states = new int[count][count];
         colors = new int[count];
     }
@@ -28,87 +28,116 @@ public class SMAStateListColor extends ColorStateList {
     /*
     Enabled / Disabled
      */
-    public SMAStateListColor addStateEnabled(String color) {
+    public SMAStateListColor enabled(String color) {
         count++;
-        states[count][count] = new int[] { android.R.attr.state_pressed    };
+        states[count] = new int[] {android.R.attr.state_enabled};
+        colors[count] = Color.parseColor(color);
         return this;
     }
 
-    public SMAStateListColor addStateDisabled(Drawable drawable) {
-        addState(new int[] {-android.R.attr.state_enabled}, drawable);
+    public SMAStateListColor disabled(String color) {
+        count++;
+        states[count] = new int[] {-android.R.attr.state_enabled};
+        colors[count] = Color.parseColor(color);
         return this;
     }
 
     /*
     Focused / Unfocused
      */
-    public SMAStateListColor addStateFocused(Drawable drawable) {
-        addState(new int[] {android.R.attr.state_focused}, drawable);
+    public SMAStateListColor focused(String color) {
+        count++;
+        states[count] = new int[] {android.R.attr.state_focused};
+        colors[count] = Color.parseColor(color);
         return this;
     }
 
-    public SMAStateListColor addStateUnfocused(Drawable drawable) {
-        addState(new int[] {-android.R.attr.state_focused}, drawable);
+    public SMAStateListColor unfocused(String color) {
+        count++;
+        states[count] = new int[] {-android.R.attr.state_focused};
+        colors[count] = Color.parseColor(color);
         return this;
     }
 
     /*
     Windows focused / Windows unfocused
      */
-    public SMAStateListColor addStateWindowFocused(Drawable drawable) {
-        addState(new int[] {android.R.attr.state_window_focused}, drawable);
+    public SMAStateListColor windowFocused(String color) {
+        count++;
+        states[count] = new int[] {android.R.attr.state_window_focused};
+        colors[count] = Color.parseColor(color);
         return this;
     }
 
-    public SMAStateListColor addStateWindowUnfocused(Drawable drawable) {
-        addState(new int[] {-android.R.attr.state_window_focused}, drawable);
+    public SMAStateListColor windowUnfocused(String color) {
+        count++;
+        states[count] = new int[] {-android.R.attr.state_window_focused};
+        colors[count] = Color.parseColor(color);
         return this;
     }
 
     /*
     Selected / Unselected
      */
-    public SMAStateListColor addStateSelected(Drawable drawable) {
-        addState(new int[] {android.R.attr.state_selected}, drawable);
+    public SMAStateListColor selected(String color) {
+        count++;
+        states[count] = new int[] {android.R.attr.state_selected};
+        colors[count] = Color.parseColor(color);
         return this;
     }
 
-    public SMAStateListColor addStateUnselected(Drawable drawable) {
-        addState(new int[] {-android.R.attr.state_selected}, drawable);
+    public SMAStateListColor unselected(String color) {
+        count++;
+        states[count] = new int[] {-android.R.attr.state_selected};
+        colors[count] = Color.parseColor(color);
         return this;
     }
 
     /*
     Pressed / Unpressed
      */
-    public SMAStateListColor addStatePressed(Drawable drawable) {
-        addState(new int[] {android.R.attr.state_pressed}, drawable);
+    public SMAStateListColor pressed(String color) {
+        count++;
+        states[count] = new int[] {android.R.attr.state_pressed};
+        colors[count] = Color.parseColor(color);
         return this;
     }
 
-    public SMAStateListColor addStateUnpressed(Drawable drawable) {
-        addState(new int[] {-android.R.attr.state_pressed}, drawable);
+    public SMAStateListColor unpressed(String color) {
+        count++;
+        states[count] = new int[] {-android.R.attr.state_pressed};
+        colors[count] = Color.parseColor(color);
         return this;
     }
 
     /*
     Checked / Unchecked
      */
-    public SMAStateListColor addStateChecked(Drawable drawable) {
-        addState(new int[] {android.R.attr.state_checked}, drawable);
+    public SMAStateListColor checked(String color) {
+        count++;
+        states[count] = new int[] {-android.R.attr.state_checked};
+        colors[count] = Color.parseColor(color);
         return this;
     }
 
-    public SMAStateListColor addStateUnchecked(Drawable drawable) {
-        addState(new int[] {-android.R.attr.state_checked}, drawable);
+    public SMAStateListColor unchecked(String color) {
+        count++;
+        states[count] = new int[] {-android.R.attr.state_checked};
+        colors[count] = Color.parseColor(color);
         return this;
     }
 
     /*
     Default states (add it at the end because it will add all the inverse states that has not been added
      */
-    public SMAStateListColor addStateDefault(Drawable drawable) {
-        addState(new int[] {}, drawable);
+    public SMAStateListColor inverse(String color) {
+        count++;
+        states[count] = new int[] {};
+        colors[count] = Color.parseColor(color);
         return this;
+    }
+
+    public ColorStateList create() {
+        return new ColorStateList(states, colors);
     }
 }

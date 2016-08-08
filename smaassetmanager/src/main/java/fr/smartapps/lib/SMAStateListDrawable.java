@@ -20,12 +20,12 @@ public class SMAStateListDrawable extends StateListDrawable {
     /*
     Enabled / Disabled
      */
-    public SMAStateListDrawable addStateEnabled(Drawable drawable) {
+    public SMAStateListDrawable enabled(Drawable drawable) {
         addState(new int[] {android.R.attr.state_enabled}, drawable);
         return this;
     }
 
-    public SMAStateListDrawable addStateDisabled(Drawable drawable) {
+    public SMAStateListDrawable disabled(Drawable drawable) {
         addState(new int[] {-android.R.attr.state_enabled}, drawable);
         return this;
     }
@@ -33,12 +33,12 @@ public class SMAStateListDrawable extends StateListDrawable {
     /*
     Focused / Unfocused
      */
-    public SMAStateListDrawable addStateFocused(Drawable drawable) {
+    public SMAStateListDrawable focused(Drawable drawable) {
         addState(new int[] {android.R.attr.state_focused}, drawable);
         return this;
     }
 
-    public SMAStateListDrawable addStateUnfocused(Drawable drawable) {
+    public SMAStateListDrawable unfocused(Drawable drawable) {
         addState(new int[] {-android.R.attr.state_focused}, drawable);
         return this;
     }
@@ -46,12 +46,12 @@ public class SMAStateListDrawable extends StateListDrawable {
     /*
     Windows focused / Windows unfocused
      */
-    public SMAStateListDrawable addStateWindowFocused(Drawable drawable) {
+    public SMAStateListDrawable windowFocused(Drawable drawable) {
         addState(new int[] {android.R.attr.state_window_focused}, drawable);
         return this;
     }
 
-    public SMAStateListDrawable addStateWindowUnfocused(Drawable drawable) {
+    public SMAStateListDrawable windowUnfocused(Drawable drawable) {
         addState(new int[] {-android.R.attr.state_window_focused}, drawable);
         return this;
     }
@@ -59,12 +59,12 @@ public class SMAStateListDrawable extends StateListDrawable {
     /*
     Selected / Unselected
      */
-    public SMAStateListDrawable addStateSelected(Drawable drawable) {
+    public SMAStateListDrawable selected(Drawable drawable) {
         addState(new int[] {android.R.attr.state_selected}, drawable);
         return this;
     }
 
-    public SMAStateListDrawable addStateUnselected(Drawable drawable) {
+    public SMAStateListDrawable unselected(Drawable drawable) {
         addState(new int[] {-android.R.attr.state_selected}, drawable);
         return this;
     }
@@ -72,12 +72,12 @@ public class SMAStateListDrawable extends StateListDrawable {
     /*
     Pressed / Unpressed
      */
-    public SMAStateListDrawable addStatePressed(Drawable drawable) {
+    public SMAStateListDrawable pressed(Drawable drawable) {
         addState(new int[] {android.R.attr.state_pressed}, drawable);
         return this;
     }
 
-    public SMAStateListDrawable addStateUnpressed(Drawable drawable) {
+    public SMAStateListDrawable unpressed(Drawable drawable) {
         addState(new int[] {-android.R.attr.state_pressed}, drawable);
         return this;
     }
@@ -85,12 +85,12 @@ public class SMAStateListDrawable extends StateListDrawable {
     /*
     Checked / Unchecked
      */
-    public SMAStateListDrawable addStateChecked(Drawable drawable) {
+    public SMAStateListDrawable checked(Drawable drawable) {
         addState(new int[] {android.R.attr.state_checked}, drawable);
         return this;
     }
 
-    public SMAStateListDrawable addStateUnchecked(Drawable drawable) {
+    public SMAStateListDrawable unchecked(Drawable drawable) {
         addState(new int[] {-android.R.attr.state_checked}, drawable);
         return this;
     }
@@ -98,7 +98,7 @@ public class SMAStateListDrawable extends StateListDrawable {
     /*
     Default states (add it at the end because it will add all the inverse states that has not been added
      */
-    public SMAStateListDrawable addComplementariesStates(Drawable drawable) {
+    public SMAStateListDrawable inverse(Drawable drawable) {
         addState(new int[] {}, drawable);
         return this;
     }
