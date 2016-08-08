@@ -5,6 +5,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -131,6 +132,13 @@ public class SMAAssetManager {
 
     public SMAStateListColor getStateListColor() {
         return new SMAStateListColor();
+    }
+
+    public Typeface getTypeFace(String url) {
+        // TODO
+        // add state bold
+        // add state italic
+        return null;
     }
 
     /*
