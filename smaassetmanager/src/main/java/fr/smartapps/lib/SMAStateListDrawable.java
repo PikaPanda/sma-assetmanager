@@ -1,5 +1,7 @@
 package fr.smartapps.lib;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 
@@ -25,9 +27,27 @@ public class SMAStateListDrawable extends StateListDrawable {
         return this;
     }
 
+    public SMAStateListDrawable enabled(String url, SMAAssetManager assetManager) {
+        if (url.startsWith("#")) {
+            return enabled(new ColorDrawable(Color.parseColor(url)));
+        }
+        else {
+            return enabled(assetManager.getDrawable(url));
+        }
+    }
+
     public SMAStateListDrawable disabled(Drawable drawable) {
         addState(new int[] {-android.R.attr.state_enabled}, drawable);
         return this;
+    }
+
+    public SMAStateListDrawable disabled(String url, SMAAssetManager assetManager) {
+        if (url.startsWith("#")) {
+            return disabled(new ColorDrawable(Color.parseColor(url)));
+        }
+        else {
+            return disabled(assetManager.getDrawable(url));
+        }
     }
 
     /*
@@ -38,9 +58,27 @@ public class SMAStateListDrawable extends StateListDrawable {
         return this;
     }
 
+    public SMAStateListDrawable focused(String url, SMAAssetManager assetManager) {
+        if (url.startsWith("#")) {
+            return focused(new ColorDrawable(Color.parseColor(url)));
+        }
+        else {
+            return focused(assetManager.getDrawable(url));
+        }
+    }
+
     public SMAStateListDrawable unfocused(Drawable drawable) {
         addState(new int[] {-android.R.attr.state_focused}, drawable);
         return this;
+    }
+
+    public SMAStateListDrawable unfocused(String url, SMAAssetManager assetManager) {
+        if (url.startsWith("#")) {
+            return unfocused(new ColorDrawable(Color.parseColor(url)));
+        }
+        else {
+            return unfocused(assetManager.getDrawable(url));
+        }
     }
 
     /*
@@ -51,9 +89,27 @@ public class SMAStateListDrawable extends StateListDrawable {
         return this;
     }
 
+    public SMAStateListDrawable windowFocused(String url, SMAAssetManager assetManager) {
+        if (url.startsWith("#")) {
+            return windowFocused(new ColorDrawable(Color.parseColor(url)));
+        }
+        else {
+            return windowFocused(assetManager.getDrawable(url));
+        }
+    }
+
     public SMAStateListDrawable windowUnfocused(Drawable drawable) {
         addState(new int[] {-android.R.attr.state_window_focused}, drawable);
         return this;
+    }
+
+    public SMAStateListDrawable windowUnfocused(String url, SMAAssetManager assetManager) {
+        if (url.startsWith("#")) {
+            return windowUnfocused(new ColorDrawable(Color.parseColor(url)));
+        }
+        else {
+            return windowUnfocused(assetManager.getDrawable(url));
+        }
     }
 
     /*
@@ -64,9 +120,27 @@ public class SMAStateListDrawable extends StateListDrawable {
         return this;
     }
 
+    public SMAStateListDrawable selected(String url, SMAAssetManager assetManager) {
+        if (url.startsWith("#")) {
+            return selected(new ColorDrawable(Color.parseColor(url)));
+        }
+        else {
+            return selected(assetManager.getDrawable(url));
+        }
+    }
+
     public SMAStateListDrawable unselected(Drawable drawable) {
         addState(new int[] {-android.R.attr.state_selected}, drawable);
         return this;
+    }
+
+    public SMAStateListDrawable unselected(String url, SMAAssetManager assetManager) {
+        if (url.startsWith("#")) {
+            return unselected(new ColorDrawable(Color.parseColor(url)));
+        }
+        else {
+            return unselected(assetManager.getDrawable(url));
+        }
     }
 
     /*
@@ -77,9 +151,27 @@ public class SMAStateListDrawable extends StateListDrawable {
         return this;
     }
 
+    public SMAStateListDrawable pressed(String url, SMAAssetManager assetManager) {
+        if (url.startsWith("#")) {
+            return pressed(new ColorDrawable(Color.parseColor(url)));
+        }
+        else {
+            return pressed(assetManager.getDrawable(url));
+        }
+    }
+
     public SMAStateListDrawable unpressed(Drawable drawable) {
         addState(new int[] {-android.R.attr.state_pressed}, drawable);
         return this;
+    }
+
+    public SMAStateListDrawable unpressed(String url, SMAAssetManager assetManager) {
+        if (url.startsWith("#")) {
+            return unpressed(new ColorDrawable(Color.parseColor(url)));
+        }
+        else {
+            return unpressed(assetManager.getDrawable(url));
+        }
     }
 
     /*
@@ -90,9 +182,27 @@ public class SMAStateListDrawable extends StateListDrawable {
         return this;
     }
 
+    public SMAStateListDrawable checked(String url, SMAAssetManager assetManager) {
+        if (url.startsWith("#")) {
+            return checked(new ColorDrawable(Color.parseColor(url)));
+        }
+        else {
+            return checked(assetManager.getDrawable(url));
+        }
+    }
+
     public SMAStateListDrawable unchecked(Drawable drawable) {
         addState(new int[] {-android.R.attr.state_checked}, drawable);
         return this;
+    }
+
+    public SMAStateListDrawable unchecked(String url, SMAAssetManager assetManager) {
+        if (url.startsWith("#")) {
+            return unchecked(new ColorDrawable(Color.parseColor(url)));
+        }
+        else {
+            return unchecked(assetManager.getDrawable(url));
+        }
     }
 
     /*
@@ -101,5 +211,14 @@ public class SMAStateListDrawable extends StateListDrawable {
     public SMAStateListDrawable inverse(Drawable drawable) {
         addState(new int[] {}, drawable);
         return this;
+    }
+
+    public SMAStateListDrawable inverse(String url, SMAAssetManager assetManager) {
+        if (url.startsWith("#")) {
+            return inverse(new ColorDrawable(Color.parseColor(url)));
+        }
+        else {
+            return inverse(assetManager.getDrawable(url));
+        }
     }
 }
