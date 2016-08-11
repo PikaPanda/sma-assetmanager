@@ -20,8 +20,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  *
@@ -127,7 +125,7 @@ public class SMAAssetManager {
     }
 
     public SMAStateListDrawable getStateListDrawable() {
-        return new SMAStateListDrawable();
+        return new SMAStateListDrawable(this);
     }
 
     public SMAStateListColor getStateListColor() {
@@ -135,9 +133,58 @@ public class SMAAssetManager {
     }
 
     public Typeface getTypeFace(String url) {
-        // TODO
-        // add state bold
-        // add state italic
+        switch (getStorageType(url)) {
+            case STORAGE_TYPE_ASSETS:
+                url = url.replace(SUFFIX_ASSETS, "");
+                try {
+                    return Typeface.createFromAsset(context.getAssets(), url);
+                } catch (Exception e) {
+                    Log.e(TAG, "Fail to get " + url + " from assets");
+                }
+                break;
+
+            case STORAGE_TYPE_EXTERNAL:
+                url = url.replace(SUFFIX_EXTERNAL, "");
+                File file = new File(getExternalPublicStorageDir() + url);
+                if (file.exists()) {
+                    try {
+                        return Typeface.createFromFile(file);
+                    } catch (Exception e) {
+                        Log.e(TAG, "Fail to get " + url + " from external public storage");
+                    }
+                }
+                break;
+
+            case STORAGE_TYPE_EXTERNAL_PRIVATE:
+                url = url.replace(SUFFIX_EXTERNAL_PRIVATE, "");
+                File privateFile = new File(getExternalPrivateStorageDir() + url);
+                if (privateFile.exists()) {
+                    try {
+                        return Typeface.createFromFile(privateFile);
+                    } catch (Exception e) {
+                        Log.e(TAG, "Fail to get " + url + " from external private storage");
+                    }
+                }
+                break;
+
+            case STORAGE_TYPE_OBB:
+                /*url = url.replace(SUFFIX_OBB, "");
+                if (expansionFile != null) {
+                    try {
+                        return expansionFile.getInputStream(url);
+                    } catch (IOException e) {
+                        Log.e(TAG, "Fail to get " + url + " from OBB storage");
+                    }
+                }
+                else {
+                    Log.e(TAG, "ExpansionFile is not defined");
+                }*/
+                break;
+
+            default:
+
+                break;
+        }
         return null;
     }
 
