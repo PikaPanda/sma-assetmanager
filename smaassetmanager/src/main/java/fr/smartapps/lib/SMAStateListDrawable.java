@@ -5,18 +5,22 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 
-import java.io.InputStream;
-
 /**
  *
  */
 public class SMAStateListDrawable extends StateListDrawable {
 
     /*
+    Attributes
+     */
+    SMAAssetManager assetManager;
+
+    /*
     Constructor
      */
-    public SMAStateListDrawable() {
+    public SMAStateListDrawable(SMAAssetManager assetManager) {
         super();
+        this.assetManager = assetManager;
     }
 
     /*
@@ -27,7 +31,7 @@ public class SMAStateListDrawable extends StateListDrawable {
         return this;
     }
 
-    public SMAStateListDrawable enabled(String url, SMAAssetManager assetManager) {
+    public SMAStateListDrawable enabled(String url) {
         if (url.startsWith("#")) {
             return enabled(new ColorDrawable(Color.parseColor(url)));
         }
@@ -41,7 +45,7 @@ public class SMAStateListDrawable extends StateListDrawable {
         return this;
     }
 
-    public SMAStateListDrawable disabled(String url, SMAAssetManager assetManager) {
+    public SMAStateListDrawable disabled(String url) {
         if (url.startsWith("#")) {
             return disabled(new ColorDrawable(Color.parseColor(url)));
         }
@@ -58,7 +62,7 @@ public class SMAStateListDrawable extends StateListDrawable {
         return this;
     }
 
-    public SMAStateListDrawable focused(String url, SMAAssetManager assetManager) {
+    public SMAStateListDrawable focused(String url) {
         if (url.startsWith("#")) {
             return focused(new ColorDrawable(Color.parseColor(url)));
         }
@@ -72,7 +76,7 @@ public class SMAStateListDrawable extends StateListDrawable {
         return this;
     }
 
-    public SMAStateListDrawable unfocused(String url, SMAAssetManager assetManager) {
+    public SMAStateListDrawable unfocused(String url) {
         if (url.startsWith("#")) {
             return unfocused(new ColorDrawable(Color.parseColor(url)));
         }
@@ -89,7 +93,7 @@ public class SMAStateListDrawable extends StateListDrawable {
         return this;
     }
 
-    public SMAStateListDrawable windowFocused(String url, SMAAssetManager assetManager) {
+    public SMAStateListDrawable windowFocused(String url) {
         if (url.startsWith("#")) {
             return windowFocused(new ColorDrawable(Color.parseColor(url)));
         }
@@ -103,7 +107,7 @@ public class SMAStateListDrawable extends StateListDrawable {
         return this;
     }
 
-    public SMAStateListDrawable windowUnfocused(String url, SMAAssetManager assetManager) {
+    public SMAStateListDrawable windowUnfocused(String url) {
         if (url.startsWith("#")) {
             return windowUnfocused(new ColorDrawable(Color.parseColor(url)));
         }
@@ -120,7 +124,7 @@ public class SMAStateListDrawable extends StateListDrawable {
         return this;
     }
 
-    public SMAStateListDrawable selected(String url, SMAAssetManager assetManager) {
+    public SMAStateListDrawable selected(String url) {
         if (url.startsWith("#")) {
             return selected(new ColorDrawable(Color.parseColor(url)));
         }
@@ -134,7 +138,7 @@ public class SMAStateListDrawable extends StateListDrawable {
         return this;
     }
 
-    public SMAStateListDrawable unselected(String url, SMAAssetManager assetManager) {
+    public SMAStateListDrawable unselected(String url) {
         if (url.startsWith("#")) {
             return unselected(new ColorDrawable(Color.parseColor(url)));
         }
@@ -151,7 +155,7 @@ public class SMAStateListDrawable extends StateListDrawable {
         return this;
     }
 
-    public SMAStateListDrawable pressed(String url, SMAAssetManager assetManager) {
+    public SMAStateListDrawable pressed(String url) {
         if (url.startsWith("#")) {
             return pressed(new ColorDrawable(Color.parseColor(url)));
         }
@@ -165,7 +169,7 @@ public class SMAStateListDrawable extends StateListDrawable {
         return this;
     }
 
-    public SMAStateListDrawable unpressed(String url, SMAAssetManager assetManager) {
+    public SMAStateListDrawable unpressed(String url) {
         if (url.startsWith("#")) {
             return unpressed(new ColorDrawable(Color.parseColor(url)));
         }
@@ -182,7 +186,7 @@ public class SMAStateListDrawable extends StateListDrawable {
         return this;
     }
 
-    public SMAStateListDrawable checked(String url, SMAAssetManager assetManager) {
+    public SMAStateListDrawable checked(String url) {
         if (url.startsWith("#")) {
             return checked(new ColorDrawable(Color.parseColor(url)));
         }
@@ -196,7 +200,7 @@ public class SMAStateListDrawable extends StateListDrawable {
         return this;
     }
 
-    public SMAStateListDrawable unchecked(String url, SMAAssetManager assetManager) {
+    public SMAStateListDrawable unchecked(String url) {
         if (url.startsWith("#")) {
             return unchecked(new ColorDrawable(Color.parseColor(url)));
         }
@@ -213,7 +217,7 @@ public class SMAStateListDrawable extends StateListDrawable {
         return this;
     }
 
-    public SMAStateListDrawable inverse(String url, SMAAssetManager assetManager) {
+    public SMAStateListDrawable inverse(String url) {
         if (url.startsWith("#")) {
             return inverse(new ColorDrawable(Color.parseColor(url)));
         }

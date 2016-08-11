@@ -23,13 +23,10 @@ public class MainActivity extends AppCompatActivity {
         imageView.setBackground(drawable.alpha(125));
 
         Button button = (Button) findViewById(R.id.button);
-
         SMAStateListDrawable stateListDrawable = assetManager.getStateListDrawable()
-                .addStateFocused(assetManager.getDrawable("assets://image.jpg").filter("#ABCDEF"))
-                .addStatePressed(assetManager.getDrawable("assets://image.jpg").filter("#ABCDEF"))
-                .addStateSelected(assetManager.getDrawable("assets://image.jpg").filter("#ABCDEF"))
-                .addComplementariesStates(assetManager.getDrawable("assets://image.jpg").filter("#ABCABC"));
-
+                .focused("#ABCDEF")
+                .pressed("#ABCDEF")
+                .inverse("#ABCABC");
         button.setBackground(stateListDrawable);
     }
 }
