@@ -12,10 +12,12 @@ import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -31,7 +33,7 @@ public class SMAAssetManager {
      */
     private String TAG = "SMAAssetManager";
     protected Context context;
-    //static public ZipResourceFile expansionFile = null;
+    protected SMAObbManager obbManager;
 
     protected final int STORAGE_TYPE_UNDEFINED = 0;
     protected final int STORAGE_TYPE_ASSETS = 1;
@@ -49,6 +51,7 @@ public class SMAAssetManager {
      */
     public SMAAssetManager(Context context) {
         this.context = context;
+        obbManager = new SMAObbManager(context);
     }
 
     /*
@@ -132,6 +135,13 @@ public class SMAAssetManager {
         return new SMAStateListColor();
     }
 
+    public SMAAudioPlayer getAudioPlayer(String url, SMAAudioPlayerListener audioPlayerListener) {
+        return new SMAAudioPlayer(context, this, url, audioPlayerListener);
+    }
+
+    /*
+    Public practical basics methods
+     */
     public Typeface getTypeFace(String url) {
         switch (getStorageType(url)) {
             case STORAGE_TYPE_ASSETS:
@@ -168,33 +178,47 @@ public class SMAAssetManager {
                 break;
 
             case STORAGE_TYPE_OBB:
-                /*url = url.replace(SUFFIX_OBB, "");
-                if (expansionFile != null) {
-                    try {
-                        return expansionFile.getInputStream(url);
-                    } catch (IOException e) {
-                        Log.e(TAG, "Fail to get " + url + " from OBB storage");
-                    }
+                // work around for Typeface from OBB ...
+                InputStream inputStream = getInputStream(url);
+                Typeface typeFace = null;
+
+                url = url.replace(SUFFIX_OBB, "");
+                String outPath = getExternalPrivateStorageDir() + "/" + url;
+
+                try
+                {
+                    byte[] buffer = new byte[inputStream.available()];
+                    BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outPath));
+
+                    int l = 0;
+                    while((l = inputStream.read(buffer)) > 0)
+                        bos.write(buffer, 0, l);
+
+                    bos.close();
+
+                    typeFace = Typeface.createFromFile(outPath);
+
+                    // clean up
+                    new File(outPath).delete();
+                    return typeFace;
                 }
-                else {
-                    Log.e(TAG, "ExpansionFile is not defined");
-                }*/
+                catch (IOException e) {
+                    Log.e(TAG, "Fail to get " + url + " from OBB storage");
+                }
                 break;
 
             default:
-
+                url = url.replace(SUFFIX_ASSETS, "");
+                try {
+                    return Typeface.createFromAsset(context.getAssets(), url);
+                } catch (Exception e) {
+                    Log.e(TAG, "Fail to get " + url + " from default assets");
+                }
                 break;
         }
         return null;
     }
 
-    public SMAAudioPlayer getAudioPlayer(String url, SMAAudioPlayerListener audioPlayerListener) {
-        return new SMAAudioPlayer(context, this, url, audioPlayerListener);
-    }
-
-    /*
-    Public practical basics methods
-     */
     public AssetFileDescriptor getAssetFileDescriptor(String url) {
         if (url == null || url.equals(""))
             return null;
@@ -236,17 +260,19 @@ public class SMAAssetManager {
 
             case STORAGE_TYPE_OBB:
                 url = url.replace(SUFFIX_OBB, "");
-                /*if(expansionFile != null)
-                    return expansionFile.getAssetFileDescriptor("obb/" + url);
-                else
-                    Log.e(TAG, "Fail to get expansion file");
-                break;*/
+                if (obbManager != null && obbManager.getExpansionFile() != null) {
+                    return obbManager.getExpansionFile().getAssetFileDescriptor(url);
+                }
+                else {
+                    Log.e(TAG, "ExpansionFile hasn't been initialized");
+                }
+                break;
 
             default:
                 try {
                     return context.getAssets().openFd(url);
                 } catch (IOException e) {
-                    Log.e(TAG, "Fail to get " + url + " from assets");
+                    Log.e(TAG, "Fail to get " + url + " from default assets");
                 }
                 break;
         }
@@ -295,17 +321,17 @@ public class SMAAssetManager {
                 break;
 
             case STORAGE_TYPE_OBB:
-                /*url = url.replace(SUFFIX_OBB, "");
-                if (expansionFile != null) {
+                url = url.replace(SUFFIX_OBB, "");
+                if (obbManager != null && obbManager.getExpansionFile() != null) {
                     try {
-                        return expansionFile.getInputStream(url);
+                        return obbManager.getExpansionFile().getInputStream(url);
                     } catch (IOException e) {
                         Log.e(TAG, "Fail to get " + url + " from OBB storage");
                     }
                 }
                 else {
-                    Log.e(TAG, "ExpansionFile is not defined");
-                }*/
+                    Log.e(TAG, "ExpansionFile hasn't been initialized");
+                }
                 break;
 
             default:
@@ -313,7 +339,7 @@ public class SMAAssetManager {
                 try {
                     return context.getAssets().open(url);
                 } catch (IOException e) {
-                    Log.e(TAG, "Fail to get " + url + " from assets");
+                    Log.e(TAG, "Fail to get " + url + " from default assets");
                 }
                 break;
         }
@@ -356,5 +382,11 @@ public class SMAAssetManager {
         }
     }
 
+    public void initMainOBB(int mainVersion, int mainSize) {
+        obbManager.initMainOBB(mainVersion, mainSize);
+    }
 
+    public void initPatchOBB(int patchVersion, int patchSize) {
+        obbManager.initPatchOBB(patchVersion, patchSize);
+    }
 }
