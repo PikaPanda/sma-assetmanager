@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 
 import fr.smartapps.lib.SMAAssetManager;
-import fr.smartapps.lib.SMAFileUtils;
 
 public class MainActivity extends AppCompatActivity {
 
