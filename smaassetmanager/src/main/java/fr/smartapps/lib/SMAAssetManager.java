@@ -511,15 +511,17 @@ public class SMAAssetManager {
     protected boolean copyFileOrDirectoryFromAssetsDir(String urlSource, String urlDestination) {
         try {
             AssetManager assetManager = context.getAssets();
+            urlSource = urlSource.replace(getAssetsSuffix(), "");
             String[] files = assetManager.list(urlSource);
             new File(urlDestination).mkdirs();
             boolean res = true;
             for (String file : files)
                 if (file.contains(".")) {
-                    res &= copyAsset(assetManager, urlSource + "/" + file, urlDestination + "/" + file);
+                    res &= copyAsset(assetManager, (urlSource == "") ? file : urlSource + "/" + file, (urlDestination == "") ? file : urlDestination + "/" + file);
+
                 }
                 else {
-                    res &= copyFileOrDirectoryFromAssetsDir(urlSource + "/" + file, urlDestination + "/" + file);
+                    res &= copyFileOrDirectoryFromAssetsDir((urlSource == "") ? file : urlSource + "/" + file, (urlDestination == "") ? file : urlDestination + "/" + file);
                 }
             return res;
         } catch (Exception e) {
@@ -542,6 +544,7 @@ public class SMAAssetManager {
             out.flush();
             out.close();
             out = null;
+            Log.e(TAG, "copy " + fromAssetPath + " to " + toPath);
             return true;
         } catch(Exception e) {
             e.printStackTrace();

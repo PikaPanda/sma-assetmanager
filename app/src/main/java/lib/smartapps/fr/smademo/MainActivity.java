@@ -71,8 +71,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 SMAAssetManager assetManager = new SMAAssetManager(getApplicationContext());
-                assetManager.copyFile(assetManager.getAssetsSuffix(), assetManager.getExternalPublicStorageSuffix());
-                assetManager.copyFile(assetManager.getAssetsSuffix(), assetManager.getExternalPrivateStorageSuffix());
+                assetManager.copyFile("assets://", "external://");
             }
         };
         task.run();
