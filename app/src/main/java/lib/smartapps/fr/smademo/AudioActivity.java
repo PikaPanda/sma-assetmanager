@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSeekBar;
 import android.widget.CompoundButton;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import fr.smartapps.lib.SMAAssetManager;
@@ -14,21 +16,45 @@ public class AudioActivity extends AppCompatActivity {
 
     public SMAAssetManager assetManager;
     public SMAAudioPlayer audioPlayer;
-    public AppCompatSeekBar progressBar;
+    public AppCompatSeekBar seekBar;
+    public TextView textInfoView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio);
 
+        // text information
+        textInfoView = (TextView) findViewById(R.id.text_info);
+
+        // seek bar
+        seekBar = (AppCompatSeekBar) findViewById(R.id.seek_bar);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                audioPlayer.seekTo(seekBar.getProgress());
+            }
+        });
+
         // audio player
         assetManager = new SMAAssetManager(this);
         audioPlayer = assetManager.getAudioPlayer("random_music.mp3", new SMAAudioPlayerListener() {
             @Override
             public void onSongProgress(int progress, int totalProgress) {
-                progressBar = (AppCompatSeekBar) findViewById(R.id.seek_bar);
-                progressBar.setMax(totalProgress);
-                progressBar.setProgress(progress);
+                if (seekBar != null) {
+                    seekBar.setMax(totalProgress);
+                    seekBar.setProgress(progress);
+                }
             }
 
             @Override
@@ -45,12 +71,21 @@ public class AudioActivity extends AppCompatActivity {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
                         audioPlayer.start();
+                        textInfoView.setText("Is Playing ...");
                     }
                     else {
                         audioPlayer.pause();
+                        textInfoView.setText("On Pause ...");
                     }
                 }
             });
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        audioPlayer.stop();
+        audioPlayer.release();
     }
 }
