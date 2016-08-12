@@ -1,3 +1,4 @@
+/*
 package fr.smartapps.lib.todo;
 
 import android.animation.Animator;
@@ -20,15 +21,19 @@ import android.widget.FrameLayout;
 import java.io.IOException;
 
 
+*/
 /**
  *
- */
+ *//*
+
 public class VideoActivity extends BaseActivity implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener, VideoControllerView.MediaPlayerControlListener, MediaPlayer.OnVideoSizeChangedListener {
 
 
-    /*
+    */
+/*
     Attributes
-     */
+     *//*
+
     protected ResizeSurfaceView mVideoSurface;
     protected MediaPlayer mMediaPlayer;
     protected VideoControllerView videoController;
@@ -43,9 +48,11 @@ public class VideoActivity extends BaseActivity implements SurfaceHolder.Callbac
     protected String title;
     protected ClassStyleDescription classStyleDescription;
 
-    /*
+    */
+/*
     Callbacks : constructor & destroy
-     */
+     *//*
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -230,9 +237,11 @@ public class VideoActivity extends BaseActivity implements SurfaceHolder.Callbac
     }
 
 
-    /*
+    */
+/*
     Surface Holder callbacks
-     */
+     *//*
+
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
     }
@@ -260,9 +269,11 @@ public class VideoActivity extends BaseActivity implements SurfaceHolder.Callbac
         mMediaPlayer.start();
     }
 
-    /**
+    */
+/**
      * Implement VideoMediaController.MediaPlayerControl
-     */
+     *//*
+
     @Override
     public boolean canPause() {
         return true;
@@ -344,3 +355,4 @@ public class VideoActivity extends BaseActivity implements SurfaceHolder.Callbac
                 fadeInNabBarAnimation();
     }
 }
+*/
