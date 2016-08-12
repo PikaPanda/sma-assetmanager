@@ -346,6 +346,9 @@ public class SMAAssetManager {
         return null;
     }
 
+    /*
+    Public tools methods
+     */
     public boolean doesFileExist(String url) {
         if (url == null) {
             return false;
