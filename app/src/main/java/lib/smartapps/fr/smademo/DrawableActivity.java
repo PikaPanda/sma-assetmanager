@@ -25,13 +25,13 @@ public class DrawableActivity extends AppCompatActivity {
         ImageView imageView3 = (ImageView) findViewById(R.id.image_3);
 
         if (imageView1 != null) {
-            imageView1.setBackground(assetManager.getDrawable("tinder.png"));
+            imageView1.setBackground(assetManager.getDrawable(Config.PREFIX_URL + "tinder.png"));
         }
         if (imageView2 != null) {
-            imageView2.setBackground(assetManager.getDrawable("tinder.png").filter("#000000"));
+            imageView2.setBackground(assetManager.getDrawable(Config.PREFIX_URL + "tinder.png").filter("#000000"));
         }
         if (imageView3 != null) {
-            imageView3.setBackground(assetManager.getDrawable("tinder.png").alpha(100));
+            imageView3.setBackground(assetManager.getDrawable(Config.PREFIX_URL + "tinder.png").alpha(100));
         }
 
         // buttons
@@ -41,20 +41,20 @@ public class DrawableActivity extends AppCompatActivity {
 
         if (buttonView != null) {
             buttonView.setBackground(assetManager.getStateListDrawable()
-                    .focused("tinder.png")
-                    .pressed("tinder.png")
-                    .inverse(assetManager.getDrawable("tinder.png").filter("#000000")));
+                    .focused(Config.PREFIX_URL + "tinder.png")
+                    .pressed(Config.PREFIX_URL + "tinder.png")
+                    .inverse(assetManager.getDrawable(Config.PREFIX_URL + "tinder.png").filter("#000000")));
         }
         if (toggleButtonView != null) {
             toggleButtonView.setBackground(assetManager.getStateListDrawable()
-                    .checked(assetManager.getDrawable("tinder.png").alpha(100))
-                    .inverse("tinder.png"));
+                    .checked(assetManager.getDrawable(Config.PREFIX_URL + "tinder.png").alpha(100))
+                    .inverse(Config.PREFIX_URL + "tinder.png"));
         }
         if (imageButtonView != null) {
             imageButtonView.setBackground(assetManager.getStateListDrawable()
-                    .focused("pikachu.png")
-                    .pressed("pikachu.png")
-                    .inverse(assetManager.getDrawable("pikachu.png").alpha(100)));
+                    .focused(Config.PREFIX_URL + "pikachu.png")
+                    .pressed(Config.PREFIX_URL + "pikachu.png")
+                    .inverse(assetManager.getDrawable(Config.PREFIX_URL + "pikachu.png").alpha(100)));
         }
 
 

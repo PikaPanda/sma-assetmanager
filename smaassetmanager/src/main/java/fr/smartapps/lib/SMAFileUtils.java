@@ -1,5 +1,7 @@
 package fr.smartapps.lib;
 
+import android.content.Context;
+import android.content.res.AssetManager;
 import android.util.Log;
 
 import java.io.File;
@@ -44,39 +46,56 @@ public class SMAFileUtils {
         return file.delete();
     }
 
-    public static void copyFileOrDirectory(String urlSource, String urlDestination) {
-        File sourceLocation = new File(urlSource);
-        File targetLocation = new File(urlDestination);
 
-        if (sourceLocation.isDirectory()) {
-            if (!targetLocation.exists()) {
-                targetLocation.mkdir();
-            }
 
-            String[] children = sourceLocation.list();
-            for (int i = 0; i < sourceLocation.listFiles().length; i++) {
-                copyFileOrDirectory(new File(sourceLocation, children[i]).getAbsolutePath(), new File(targetLocation, children[i]).getAbsolutePath());
-            }
+
+
+    public static void copyFileOrDirectoryFromAssets(Context context, String urlSource, String urlDestination) {
+        urlSource = urlSource.replace(SMAAssetManager.SUFFIX_ASSETS, "");
+
+        AssetManager assetManager = context.getAssets();
+        String[] files = null;
+        try {
+            files = assetManager.list("");
+        } catch (IOException e) {
+            Log.e("tag", "Failed to get asset file list.", e);
         }
-        else {
-            InputStream in;
-            try {
-                in = new FileInputStream(sourceLocation);
-                OutputStream out = new FileOutputStream(targetLocation);
-                byte[] buf = new byte[1024];
-                int len;
-                while ((len = in.read(buf)) > 0) {
-                    out.write(buf, 0, len);
+        if (files != null) {
+            for (String filename : files) {
+                InputStream in = null;
+                OutputStream out = null;
+                try {
+                    in = assetManager.open(filename);
+                    File outFile = new File(urlDestination, filename);
+                    out = new FileOutputStream(outFile);
+                    copyFile(in, out);
+                } catch (IOException e) {
+                    Log.e("tag", "Failed to copy asset file: " + filename, e);
+                } finally {
+                    if (in != null) {
+                        try {
+                            in.close();
+                        } catch (IOException e) {
+                            // NOOP
+                        }
+                    }
+                    if (out != null) {
+                        try {
+                            out.close();
+                        } catch (IOException e) {
+                            // NOOP
+                        }
+                    }
                 }
-                in.close();
-                out.close();
-
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
+    }
 
+    public static void copyFile(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[1024];
+        int read;
+        while((read = in.read(buffer)) != -1){
+            out.write(buffer, 0, read);
+        }
     }
 }

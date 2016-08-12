@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -21,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.Arrays;
 
 /**
@@ -41,10 +43,10 @@ public class SMAAssetManager {
     protected final int STORAGE_TYPE_EXTERNAL_PRIVATE = 3;
     protected final int STORAGE_TYPE_OBB = 4;
 
-    public String SUFFIX_ASSETS = "assets://";
-    public String SUFFIX_EXTERNAL = "external://";
-    public String SUFFIX_EXTERNAL_PRIVATE = "external_private://";
-    public String SUFFIX_OBB = "obb://";
+    final static public String SUFFIX_ASSETS = "assets://";
+    final static public String SUFFIX_EXTERNAL = "external://";
+    final static public String SUFFIX_EXTERNAL_PRIVATE = "external_private://";
+    final static public String SUFFIX_OBB = "obb://";
 
     /*
     Constructor
@@ -57,7 +59,7 @@ public class SMAAssetManager {
     /*
     Protected basics methods
      */
-    protected int getStorageType(String url) {
+    public int getStorageType(String url) {
         if (url == null)
             return STORAGE_TYPE_UNDEFINED;
 
@@ -76,11 +78,11 @@ public class SMAAssetManager {
         return STORAGE_TYPE_UNDEFINED;
     }
 
-    protected String getExternalPublicStorageDir() {
+    public String getExternalPublicStorageSuffix() {
         return Environment.getExternalStorageDirectory().getAbsolutePath();
     }
 
-    protected String getExternalPrivateStorageDir() {
+    public String getExternalPrivateStorageSuffix() {
         try {
             PackageManager packageManager = context.getPackageManager();
             String packageName = context.getPackageName();
@@ -92,8 +94,36 @@ public class SMAAssetManager {
         }
     }
 
-    protected String getAssetsDir() {
+    public String getAssetsSuffix() {
         return "file:///android_asset/";
+    }
+
+    public String getObbSuffix() {
+        return "";
+    }
+
+    public String getAbsoluteUrl(String url) {
+        switch (getStorageType(url)) {
+
+            case STORAGE_TYPE_ASSETS:
+                url = url.replace(SUFFIX_ASSETS, "");
+                return getAssetsSuffix() + url;
+
+            case STORAGE_TYPE_EXTERNAL:
+                url = url.replace(SUFFIX_EXTERNAL, "");
+                return getExternalPublicStorageSuffix() + url;
+
+            case STORAGE_TYPE_EXTERNAL_PRIVATE:
+                url = url.replace(SUFFIX_EXTERNAL_PRIVATE, "");
+                return getExternalPrivateStorageSuffix() + url;
+
+            case STORAGE_TYPE_OBB:
+                url = url.replace(SUFFIX_OBB, "");
+                return getObbSuffix() + url;
+
+            default:
+                return url;
+        }
     }
 
     /*
@@ -155,7 +185,7 @@ public class SMAAssetManager {
 
             case STORAGE_TYPE_EXTERNAL:
                 url = url.replace(SUFFIX_EXTERNAL, "");
-                File file = new File(getExternalPublicStorageDir() + url);
+                File file = new File(getExternalPublicStorageSuffix() + url);
                 if (file.exists()) {
                     try {
                         return Typeface.createFromFile(file);
@@ -167,7 +197,7 @@ public class SMAAssetManager {
 
             case STORAGE_TYPE_EXTERNAL_PRIVATE:
                 url = url.replace(SUFFIX_EXTERNAL_PRIVATE, "");
-                File privateFile = new File(getExternalPrivateStorageDir() + url);
+                File privateFile = new File(getExternalPrivateStorageSuffix() + url);
                 if (privateFile.exists()) {
                     try {
                         return Typeface.createFromFile(privateFile);
@@ -183,7 +213,7 @@ public class SMAAssetManager {
                 Typeface typeFace = null;
 
                 url = url.replace(SUFFIX_OBB, "");
-                String outPath = getExternalPrivateStorageDir() + "/" + url;
+                String outPath = getExternalPrivateStorageSuffix() + "/" + url;
 
                 try
                 {
@@ -236,7 +266,7 @@ public class SMAAssetManager {
 
             case STORAGE_TYPE_EXTERNAL:
                 url = url.replace(SUFFIX_EXTERNAL, "");
-                File file = new File(getExternalPublicStorageDir() + url);
+                File file = new File(getExternalPublicStorageSuffix() + url);
                 if (file.exists())
                     try {
                         Uri path = Uri.fromFile(file);
@@ -248,7 +278,7 @@ public class SMAAssetManager {
 
             case STORAGE_TYPE_EXTERNAL_PRIVATE:
                 url = url.replace(SUFFIX_EXTERNAL_PRIVATE, "");
-                File privateFile = new File(getExternalPrivateStorageDir() + "/" + url);
+                File privateFile = new File(getExternalPrivateStorageSuffix() + "/" + url);
                 if (privateFile.exists())
                     try {
                         Uri path = Uri.fromFile(privateFile);
@@ -298,7 +328,7 @@ public class SMAAssetManager {
 
             case STORAGE_TYPE_EXTERNAL:
                 url = url.replace(SUFFIX_EXTERNAL, "");
-                File file = new File(getExternalPublicStorageDir() + url);
+                File file = new File(getExternalPublicStorageSuffix() + url);
                 if (file.exists()) {
                     try {
                         return new FileInputStream(file);
@@ -310,7 +340,7 @@ public class SMAAssetManager {
 
             case STORAGE_TYPE_EXTERNAL_PRIVATE:
                 url = url.replace(SUFFIX_EXTERNAL_PRIVATE, "");
-                File privateFile = new File(getExternalPrivateStorageDir() + url);
+                File privateFile = new File(getExternalPrivateStorageSuffix() + url);
                 if (privateFile.exists()) {
                     try {
                         return new FileInputStream(privateFile);
@@ -357,13 +387,13 @@ public class SMAAssetManager {
         switch (getStorageType(url)) {
             case STORAGE_TYPE_EXTERNAL:
                 url = url.replace(SUFFIX_EXTERNAL, "");
-                File externalPublicFile = new File(getExternalPublicStorageDir() + url);
+                File externalPublicFile = new File(getExternalPublicStorageSuffix() + url);
                 Log.e(TAG, externalPublicFile.getAbsolutePath() + " exist " + externalPublicFile.exists());
                 return externalPublicFile.exists();
 
             case STORAGE_TYPE_EXTERNAL_PRIVATE:
                 url = url.replace(SUFFIX_EXTERNAL_PRIVATE, "");
-                File externalPrivateFile = new File(getExternalPrivateStorageDir() + url);
+                File externalPrivateFile = new File(getExternalPrivateStorageSuffix() + url);
                 Log.e(TAG, externalPrivateFile.getAbsolutePath() + " exist " + externalPrivateFile.exists());
                 return externalPrivateFile.exists();
 
@@ -392,4 +422,140 @@ public class SMAAssetManager {
     public void initPatchOBB(int patchVersion, int patchSize) {
         obbManager.initPatchOBB(patchVersion, patchSize);
     }
+
+    /*
+    File Tools : copy/create/delete file/folder TODO
+     */
+    public void copyFile(String urlSource, String urlDestination) {
+        switch (getStorageType(urlDestination)) {
+            case STORAGE_TYPE_ASSETS:
+                Log.e(TAG, "You cannot copy files inside APK folders (res, assets, ...).");
+                return;
+
+            case STORAGE_TYPE_OBB:
+                Log.e(TAG, "You cannot copy files inside OBB zip folder.");
+                return;
+
+            case STORAGE_TYPE_EXTERNAL:
+                // continue
+                break;
+
+            case STORAGE_TYPE_EXTERNAL_PRIVATE:
+                // continue
+                break;
+
+            default:
+                Log.e(TAG, "Wrong url destination : " + urlDestination + " / urlDestination must start with SMAAssetManager suffixes");
+                return;
+        }
+
+        switch (getStorageType(urlSource)) {
+            case STORAGE_TYPE_ASSETS:
+                copyFileOrDirectoryFromAssetsDir(getAbsoluteUrl(urlSource), getAbsoluteUrl(urlDestination));
+                return;
+
+            case STORAGE_TYPE_OBB:
+                // TODO
+                return;
+
+            case STORAGE_TYPE_EXTERNAL:
+                copyFileOrDirectoryFromExternalDir(getAbsoluteUrl(urlSource), getAbsoluteUrl(urlDestination));
+                break;
+
+            case STORAGE_TYPE_EXTERNAL_PRIVATE:
+                copyFileOrDirectoryFromExternalDir(getAbsoluteUrl(urlSource), getAbsoluteUrl(urlDestination));
+                break;
+
+            default:
+                Log.e(TAG, "Wrong url source : " + urlSource + " / urlSource must start with SMAAssetManager suffixes (assets://, external://, external_private://, obb://)");
+                return;
+        }
+    }
+
+    protected void copyFileOrDirectoryFromExternalDir(String urlSource, String urlDestination) {
+        File sourceLocation = new File(urlSource);
+        File targetLocation = new File(urlDestination);
+
+        if (sourceLocation.isDirectory()) {
+            if (!targetLocation.exists()) {
+                targetLocation.mkdir();
+            }
+
+            String[] children = sourceLocation.list();
+            for (int i = 0; i < sourceLocation.listFiles().length; i++) {
+                copyFileOrDirectoryFromExternalDir(new File(sourceLocation, children[i]).getAbsolutePath(), new File(targetLocation, children[i]).getAbsolutePath());
+            }
+        }
+        else {
+            InputStream in;
+            try {
+                in = new FileInputStream(sourceLocation);
+                OutputStream out = new FileOutputStream(targetLocation);
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = in.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+                in.close();
+                out.close();
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // http://stackoverflow.com/questions/16983989/copy-directory-from-assets-to-data-folder?answertab=active#tab-top
+    protected boolean copyFileOrDirectoryFromAssetsDir(String urlSource, String urlDestination) {
+        try {
+            AssetManager assetManager = context.getAssets();
+            String[] files = assetManager.list(urlSource);
+            new File(urlDestination).mkdirs();
+            boolean res = true;
+            for (String file : files)
+                if (file.contains(".")) {
+                    res &= copyAsset(assetManager, urlSource + "/" + file, urlDestination + "/" + file);
+                }
+                else {
+                    res &= copyFileOrDirectoryFromAssetsDir(urlSource + "/" + file, urlDestination + "/" + file);
+                }
+            return res;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // http://stackoverflow.com/questions/16983989/copy-directory-from-assets-to-data-folder?answertab=active#tab-top
+    protected boolean copyAsset(AssetManager assetManager, String fromAssetPath, String toPath) {
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+            in = assetManager.open(fromAssetPath);
+            new File(toPath).createNewFile();
+            out = new FileOutputStream(toPath);
+            copyFile(in, out);
+            in.close();
+            in = null;
+            out.flush();
+            out.close();
+            out = null;
+            return true;
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // http://stackoverflow.com/questions/16983989/copy-directory-from-assets-to-data-folder?answertab=active#tab-top
+    protected void copyFile(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[1024];
+        int read;
+        while((read = in.read(buffer)) != -1){
+            out.write(buffer, 0, read);
+        }
+    }
+
 }

@@ -6,6 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import fr.smartapps.lib.SMAAssetManager;
+import fr.smartapps.lib.SMAFileUtils;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -60,5 +63,19 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+
+        initCopy();
+    }
+
+    protected void initCopy() {
+        Runnable task = new Runnable() {
+            @Override
+            public void run() {
+                SMAAssetManager assetManager = new SMAAssetManager(getApplicationContext());
+                assetManager.copyFile(assetManager.getAssetsSuffix(), assetManager.getExternalPublicStorageSuffix());
+                assetManager.copyFile(assetManager.getAssetsSuffix(), assetManager.getExternalPrivateStorageSuffix());
+            }
+        };
+        task.run();
     }
 }
